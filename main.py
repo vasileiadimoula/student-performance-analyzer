@@ -1,8 +1,15 @@
 from student import Student
-students = [Student("Maria",[18,16,19,17]),
-           Student("John",[14,15,13,16]),
-           Student("Anna",[19,20,18,19]),
-           Student("George",[12,14,15,13])]
+import json
+
+with open('students.json', 'r') as file:
+    data = json.load(file)
+
+students = []
+
+for student_data in data:
+    student = Student(student_data['name'], student_data['grades'])
+    students.append(student)
+
 for student in students:
     print(student.name)
     print(student.average())

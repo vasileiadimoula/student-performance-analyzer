@@ -1,0 +1,16 @@
+
+[ 
+    {"name": "Maria",
+     "grades": [18,16,19,17]
+    },
+    {"name": "John",
+     "grades": [14,15,13,16]
+    },
+    {"name": "Anna",
+     "grades": [20,19,18,19]
+    },
+    {"name": "George",
+     "grades": [12,14,15,13]
+    }
+    
+]
