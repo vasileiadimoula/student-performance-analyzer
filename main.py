@@ -1,16 +1,27 @@
 from student import Student
+from database import (
+    create_table,
+    add_student, 
+    get_all_students, 
+    delete_student,
+    update_student,
+    find_student
+)
 import json
 import csv
 import sqlite3
+create_table()
+add_student("Test Student", 18.5)
+students_from_db = get_all_students()
+print("\n---Students from database.py---")
+for student in  students_from_db:
+    print(student)
 with open('students.json', 'r') as file:
     data = json.load(file)
-
 students = []
-
 for student_data in data:
     student = Student(student_data['name'], student_data['grades'])
     students.append(student)
-
 for student in students:
     print(student.name)
     print(student.average())
@@ -42,57 +53,28 @@ with open("students.csv", "r") as file:
       csv_students.append(student)
 for student in csv_students:
     print(student.name, student.average())
-connection = sqlite3.connect("students.db")
-cursor = connection.cursor()
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS students (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
-    average REAL NOT NULL
-)
-""")
 for student in csv_students:
-    cursor.execute(
-        "INSERT  OR REPLACE INTO students (name,average) VALUES (?,?)",
-        (student.name,student.average())
-    )
-connection.commit()
-cursor.execute("SELECT * FROM students")
-rows = cursor.fetchall()
-print("\n--- Students from database---")
-for row in rows:
+    add_student(student.name, student.average())
+students_from_db = get_all_students()
+for row in students_from_db:
     print(row)
 name_to_search = input("\nEnter student name: ")
-cursor.execute(
-    "SELECT * FROM students WHERE name = ?",
-    (name_to_search,)
-)
-student_found = cursor.fetchone()
+student_found = find_student(name_to_search)
 if student_found:
     print("Student found:", student_found)
 else:
     print("Student not found.")
-
-connection.commit()
 student_name = input("\nEnter student name to update:")
 new_average = float(input("Enter new average: "))
-cursor.execute("" \
-    "UPDATE students SET average = ? WHERE name = ?",
-    (new_average, student_name)
-)
-connection.commit()
-print("\nAnna's average updated successfully!")
+updated = update_student(student_name, new_average)
+if updated > 0:
+    print(f"{student_name}'s average updated successfully!")
+else:
+    print("Student not found.")
 student_to_delete = input("Enter student name to delete:")
-cursor.execute(
-    "Delete FROM students WHERE name = ?",
-    (student_to_delete,)
-)
-connection.commit()
-print(f"{student_to_delete} deleted successfully!")
-cursor.execute(
-    "SELECT * FROM students WHERE name = ?",
-    ("Anna",)
-)
-print(cursor.fetchone())
-connection.close()
+deleted = delete_student(student_to_delete)
+if deleted > 0:
+    print(f"{student_to_delete} deleted successfully!")
+else:
+    print("Student not found.")
 print("\nData created succesfully")
