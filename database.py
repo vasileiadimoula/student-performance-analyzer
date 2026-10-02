@@ -18,11 +18,13 @@ def add_student(name,average):
     connection = connect_database()
     cursor = connection.cursor()
     cursor.execute(
-            "INSERT  OR REPLACE INTO students (name,average) VALUES (?,?)",
+            "INSERT  OR IGNORE INTO students (name,average) VALUES (?,?)",
             (name,average)
         )
+    added = cursor.rowcount
     connection.commit()
     connection.close()
+    return added
 def get_all_students():
     connection = connect_database()
     cursor = connection.cursor()
@@ -65,4 +67,12 @@ def find_student(name):
     )
     student = cursor.fetchone()
     connection.close()
-    return student
+    return student 
+def database_is_empty():
+    connection = connect_database()
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM students")
+    count = cursor.fetchone()[0]
+    connection.close()
+    return count == 0
