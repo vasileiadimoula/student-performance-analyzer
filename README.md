@@ -14,19 +14,29 @@ A Python application for managing student grades and analyzing academic performa
 ## Technologies
 
 - Python
+- SQLite
+- CSV
 - Object-Oriented Programming (OOP)
+- Python unittest
 - Git
 - GitHub
 
 ## Project Structure
 
-- `main.py` - Runs the application and performs the analysis
-- `student.py` - Contains the Student class
+- `main.py` - Runs the application and handles the main menu
+- `student.py` - Contains the Student class and average calculation
+- `database.py` - Handles SQLite database operations
+- `test_student.py` - Contains automated unit tests
+- `students.csv` - Contains the initial student data
 - `README.md` - Project documentation
+- `.gitignore` - Specifies files that Git should ignore
+
+
+
 
 ## How to Run
 
 Run the application from the terminal:
 
 ```bash
-python3 main.py
+python3 main.py 
